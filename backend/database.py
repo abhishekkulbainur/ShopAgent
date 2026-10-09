@@ -43,7 +43,9 @@ _CACHE = {}
 def load_products(db_path=DB_PATH):
     if db_path not in _CACHE:
         if not os.path.exists(db_path): build(db_path=db_path)
-        con = sqlite3.connect(db_path); con.row_factory = sqlite3.Row
+        # Use URI read-only mode to prevent write attempts on Vercel's read-only filesystem
+        db_uri = db_path.replace("\\", "/")
+        con = sqlite3.connect(f"file:{db_uri}?mode=ro", uri=True); con.row_factory = sqlite3.Row
         _CACHE[db_path] = [dict(r) for r in con.execute("SELECT * FROM products ORDER BY id")]
         con.close()
     return _CACHE[db_path]

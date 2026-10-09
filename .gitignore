@@ -9,5 +9,4 @@ backend/venv/
 .env
 .env.*
 !.env.example
-data/footwear.db
 data/emb_minilm.npy
